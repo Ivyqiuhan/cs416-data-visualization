@@ -29,7 +29,7 @@ d3.csv("data/supermarket_sale_data.csv").then(data => {
         height = 600 - margin.top - margin.bottom;
 
 
-    drawChart1(data);
+    drawChart1(data, true);
     drawChart2(data);
     drawChart3(data);
 });
@@ -46,10 +46,10 @@ function updateChart1() {
     });
 
     d3.selectAll("#chart1 > *").remove();
-    drawChart1(filteredData);
+    drawChart1(filteredData, document.getElementById("Food and beverages").checked);
 }
 
-function drawChart1(data) {
+function drawChart1(data, showAnnotation) {
 
     let groupByProduceLine = Array.from(d3.group(data, d => d["Product line"])).map(
         produceLine => {
@@ -108,7 +108,10 @@ function drawChart1(data) {
         .attr("height", function(d) { return height - y1(d.total); })
         .style("fill", function (d) { return produceLineColor(d.category) });
 
-    svg1.append("g").call(chart1annotations);
+    if(showAnnotation) {
+        svg1.append("g").call(chart1annotations);
+    }
+
 }
 
 function updateChart2() {
@@ -153,7 +156,7 @@ function drawChart2(data) {
         .call(d3.axisBottom(x2));
 
     let y2 = d3.scaleLinear()
-        .domain([5, 130])
+        .domain([5, 110])
         .range([height, 0]);
     svg2.append("g")
         .call(d3.axisLeft(y2));
